@@ -35,6 +35,10 @@
 
   
 
+  
+  <link rel="stylesheet" href="/lib/gitalk/gitalk.css">
+  <script src="/lib/gitalk/gitalk.min.js"></script>
+
 </head>
 
 <body>
@@ -506,6 +510,25 @@ public Object getUserPage( Page page, User user ) {
 
   
 
+
+<div class="gitalk">
+    <div id="gitalk-container"></div>
+    <script type="text/javascript">
+        const gitalk = new Gitalk({
+            clientID: 'Iv1.d23cdc136f65bd6e',
+            clientSecret: 'a1a46766aa94a477381345281cf8370a6819c299',
+            repo: 'https://github.com/kkpower/mygitalk.git',
+            owner: 'kkpower',
+            admin: ['kkpower'],
+            id: md5(location.pathname),      // Ensure uniqueness and length less than 50
+            distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+ 
+        gitalk.render('gitalk-container')
+    </script>
+</div>
+
+
   
 
   
@@ -597,11 +620,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">SPRING BOOT</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">MYBATIS,SQL,SPRINGBOOT</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">MYBATIS,SQL,SPRINGBOOT</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">SPRING BOOT</a>
               </li>
             
             <div class="clearfix"></div>
