@@ -6,14 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019 | C Ren</title>
+  <title>封装一个流水号ID生成器：id-spring-boot-starter | C Ren</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="C Ren">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;2019&#x2F;index.html">
+  <meta name="description" content="别再用数据库自增ID，UUID了，用流水号生成器生成吧">
+<meta name="keywords" content="SPRING BOOT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="封装一个流水号ID生成器：id-spring-boot-starter">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter&#x2F;index.html">
 <meta property="og:site_name" content="C Ren">
+<meta property="og:description" content="别再用数据库自增ID，UUID了，用流水号生成器生成吧">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter&#x2F;result.jpg">
+<meta property="og:updated_time" content="2019-11-08T08:00:18.160Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter&#x2F;result.jpg">
   
     <link rel="alternative" href="/atom.xml" title="C Ren" type="application/atom+xml">
   
@@ -149,36 +155,100 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-封装一个流水号ID生成器：id-spring-boot-starter" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/08/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter/" class="archive-article-date">
-  	<time datetime="2019-11-08T07:43:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/08/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter/">封装一个流水号ID生成器：id-spring-boot-starter</a>
+    <h1 class="article-title" itemprop="name">
+      封装一个流水号ID生成器：id-spring-boot-starter
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/11/08/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter/" class="archive-article-date">
+  	<time datetime="2019-11-08T07:43:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>别再用数据库自增ID，UUID了，用流水号生成器生成吧</p>
+<a id="more"></a>
+
+<p><strong>概述</strong></p>
+<p>ID号生成器（或：全局唯一ID生成器）是服务端系统的基础设施，而且ID号这个东西基本搞后端开发的程序员天天都要接触。而关于ID生成的算法现在业界首屈一指的当属Snowflake雪花算法。</p>
+<p>UidGenerator正是百度开源的一款基于Snowflake雪花算法实现的高性能唯一ID生成器。在本号前文中已经详细使用过UidGenerator，但使用过程还是比较繁杂，还需要自己去引UidGenerator组件的源码，感觉有点不方便。为此本文基于UidGenerator，再来封装一套更利于Spring Boot项目使用的ID号生成组件，命名为id-spring-boot-starter，一看名字就知道是开箱即用的。</p>
+<p><strong>用法</strong></p>
+<ul>
+<li>导入sql脚本</li>
+</ul>
+<p>DROP TABLE IF EXISTS WORKER_NODE;<br>CREATE TABLE WORKER_NODE<br>(<br>ID BIGINT NOT NULL AUTO_INCREMENT COMMENT ‘auto increment id’,<br>HOST_NAME VARCHAR(64) NOT NULL COMMENT ‘host name’,<br>PORT VARCHAR(64) NOT NULL COMMENT ‘port’,<br>TYPE INT NOT NULL COMMENT ‘node type: ACTUAL or CONTAINER’,<br>LAUNCH_DATE DATE NOT NULL COMMENT ‘launch date’,<br>MODIFIED TIMESTAMP NOT NULL COMMENT ‘modified time’,<br>CREATED TIMESTAMP NOT NULL COMMENT ‘created time’,<br>PRIMARY KEY(ID)<br>)<br> COMMENT=’DB WorkerID Assigner for UID Generator’,ENGINE = INNODB</p>
+<p>这一步肯定是省不掉，毕竟UidGenerator需要数据库支持</p>
+<p>这一步肯定是省不掉，毕竟UidGenerator需要数据库支持</p>
+<ul>
+<li>pom中加入依赖</li>
+</ul>
+<dependency>
+    <groupId>cn.codesheep</groupId>
+    <artifactId>id-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+
+
+<ul>
+<li>配置数据库连接</li>
+</ul>
+<p>url: jdbc:mysql://xxx.xxx.xxx.xxx:3306/demo?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;useOldAliasMetadataBehavior=true&amp;connectionCollation=utf8mb4_unicode_ci&amp;rewriteBatchedStatements=true&amp;allowMultiQueries=true<br>username: xxxxxx<br>password: xxxxxx</p>
+<p>还是因为UidGenerator需要数据库支持</p>
+<ul>
+<li>修改Spring Boot主类</li>
+</ul>
+<p>Spring Boot应用主类上加上mybatis注解即可：</p>
+<p>@MapperScan({“com.baidu.fsg.uid.worker.dao”})</p>
+<ul>
+<li>代码使用方式</li>
+</ul>
+<p>@RestController<br>public class TestController {</p>
+<p>  @Autowired<br>  private UidGenService uidGenService;</p>
+<p>  @GetMapping(“/uid”)<br>  public String genUid() {<br>    return String.valueOf(“本次生成的唯一ID号为：”+uidGenService.getUid());<br>  }<br>}</p>
+<p>怎么样，用法超级简单吧：</p>
+<p>1.首先用 Autowired的方式引入UidGenService类；<br>2.直接调用UidGenService类的getUid()方法即可获得一个Long型的 ID号</p>
+<ul>
+<li>运行效果</li>
+</ul>
+<p><img src="/2019/11/08/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter/result.jpg" alt></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" target="_blank" rel="noopener" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -190,46 +260,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" target="_blank" rel="noopener" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/11/08/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/02/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%86%99%E7%AE%80%E5%8E%86%E6%97%B6%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E7%9A%84%E6%8A%80%E6%9C%AF%E8%AF%8D%E6%B1%87%E6%8B%BC%E5%86%99/" class="archive-article-date">
-  	<time datetime="2019-03-02T03:54:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-02</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/02/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%86%99%E7%AE%80%E5%8E%86%E6%97%B6%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E7%9A%84%E6%8A%80%E6%9C%AF%E8%AF%8D%E6%B1%87%E6%8B%BC%E5%86%99/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">程序员写简历时必须注意的技术词汇拼写</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/02/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%86%99%E7%AE%80%E5%8E%86%E6%97%B6%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E7%9A%84%E6%8A%80%E6%9C%AF%E8%AF%8D%E6%B1%87%E6%8B%BC%E5%86%99/">程序员写简历时必须注意的技术词汇拼写</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -252,8 +382,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
