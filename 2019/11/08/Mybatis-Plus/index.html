@@ -6,20 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>封装一个流水号ID生成器：id-spring-boot-starter | C Ren</title>
+  <title>Mybatis-Plus 真好用（乡村爱情加持） | C Ren</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="别再用数据库自增ID，UUID了，用流水号生成器生成吧">
-<meta name="keywords" content="SPRING BOOT">
+  <meta name="description" content="Mybatis Plus是迄今为止用过最方便的MyBatis增强方案，简单易上手">
+<meta name="keywords" content="MYBATIS,SQL,SPRINGBOOT">
 <meta property="og:type" content="article">
-<meta property="og:title" content="封装一个流水号ID生成器：id-spring-boot-starter">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter&#x2F;index.html">
+<meta property="og:title" content="Mybatis-Plus 真好用（乡村爱情加持）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;Mybatis-Plus&#x2F;index.html">
 <meta property="og:site_name" content="C Ren">
-<meta property="og:description" content="别再用数据库自增ID，UUID了，用流水号生成器生成吧">
+<meta property="og:description" content="Mybatis Plus是迄今为止用过最方便的MyBatis增强方案，简单易上手">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter&#x2F;result.jpg">
-<meta property="og:updated_time" content="2019-11-08T08:00:18.160Z">
+<meta property="og:updated_time" content="2019-11-08T09:55:09.369Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter&#x2F;result.jpg">
   
     <link rel="alternative" href="/atom.xml" title="C Ren" type="application/atom+xml">
   
@@ -155,71 +153,231 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-封装一个流水号ID生成器：id-spring-boot-starter" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Mybatis-Plus" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      封装一个流水号ID生成器：id-spring-boot-starter
+      Mybatis-Plus 真好用（乡村爱情加持）
     </h1>
   
 
         
-        <a href="/2019/11/08/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter/" class="archive-article-date">
-  	<time datetime="2019-11-08T07:43:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
+        <a href="/2019/11/08/Mybatis-Plus/" class="archive-article-date">
+  	<time datetime="2019-11-08T08:50:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>别再用数据库自增ID，UUID了，用流水号生成器生成吧</p>
+        <p>Mybatis Plus是迄今为止用过最方便的MyBatis增强方案，简单易上手</p>
 <a id="more"></a>
 
-<p><strong>概述</strong></p>
-<p>ID号生成器（或：全局唯一ID生成器）是服务端系统的基础设施，而且ID号这个东西基本搞后端开发的程序员天天都要接触。而关于ID生成的算法现在业界首屈一指的当属Snowflake雪花算法。</p>
-<p>UidGenerator正是百度开源的一款基于Snowflake雪花算法实现的高性能唯一ID生成器。在本号前文中已经详细使用过UidGenerator，但使用过程还是比较繁杂，还需要自己去引UidGenerator组件的源码，感觉有点不方便。为此本文基于UidGenerator，再来封装一套更利于Spring Boot项目使用的ID号生成组件，命名为id-spring-boot-starter，一看名字就知道是开箱即用的。</p>
-<p><strong>用法</strong></p>
-<ul>
-<li>导入sql脚本</li>
-</ul>
-<p>DROP TABLE IF EXISTS WORKER_NODE;<br>CREATE TABLE WORKER_NODE<br>(<br>ID BIGINT NOT NULL AUTO_INCREMENT COMMENT ‘auto increment id’,<br>HOST_NAME VARCHAR(64) NOT NULL COMMENT ‘host name’,<br>PORT VARCHAR(64) NOT NULL COMMENT ‘port’,<br>TYPE INT NOT NULL COMMENT ‘node type: ACTUAL or CONTAINER’,<br>LAUNCH_DATE DATE NOT NULL COMMENT ‘launch date’,<br>MODIFIED TIMESTAMP NOT NULL COMMENT ‘modified time’,<br>CREATED TIMESTAMP NOT NULL COMMENT ‘created time’,<br>PRIMARY KEY(ID)<br>)<br> COMMENT=’DB WorkerID Assigner for UID Generator’,ENGINE = INNODB</p>
-<p>这一步肯定是省不掉，毕竟UidGenerator需要数据库支持</p>
-<p>这一步肯定是省不掉，毕竟UidGenerator需要数据库支持</p>
-<ul>
-<li>pom中加入依赖</li>
-</ul>
-<dependency>
-    <groupId>cn.codesheep</groupId>
-    <artifactId>id-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
-</dependency>
 
+<p><strong>写在前面</strong></p>
+<p>MyBatis的增强方案确实有不少，甚至有种感觉是现在如果只用 “裸MyBatis”，不来点增强插件都不好意思了。这次来点更加先进的 Mybatis-Plus，SQL语句都不用写了，分页也是自动完成，嗯，真香！</p>
+<p><strong>数据库准备</strong></p>
+<pre><code>CREATE TABLE tbl_user
+(
+    user_id BIGINT(20) NOT NULL COMMENT &apos;主键ID&apos;,
+    user_name VARCHAR(30) NULL DEFAULT NULL COMMENT &apos;姓名&apos;,
+    user_age INT(11) NULL DEFAULT NULL COMMENT &apos;年龄&apos;,
+    PRIMARY KEY (user_id)
+) charset = utf8;</code></pre><p><strong>MyBatis-Plus加持</strong></p>
+<ul>
+<li>工程搭建 （不赘述了）</li>
+</ul>
+<ul>
+<li>依赖引入</li>
+</ul>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-plus-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;3.1.0&lt;/version&gt;
+&lt;/dependency&gt;
 
+&lt;dependency&gt;
+    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+    &lt;artifactId&gt;druid-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;1.1.9&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;version&gt;8.0.12&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><p>主要是 Mybatis Plus、Lombok、Druid连接池 等依赖。</p>
 <ul>
-<li>配置数据库连接</li>
+<li>MyBatis Plus配置</li>
 </ul>
-<p>url: jdbc:mysql://xxx.xxx.xxx.xxx:3306/demo?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;useOldAliasMetadataBehavior=true&amp;connectionCollation=utf8mb4_unicode_ci&amp;rewriteBatchedStatements=true&amp;allowMultiQueries=true<br>username: xxxxxx<br>password: xxxxxx</p>
-<p>还是因为UidGenerator需要数据库支持</p>
+<p>项目配置</p>
+<pre><code>mybatis-plus:
+   mapper-locations: classpath:/mapper/*Mapper.xml</code></pre><p>新增 MyBatis Plus配置类</p>
+<pre><code>@Configuration
+@MapperScan(&quot;cn.codesheep.springbtmybatisplus.mapper&quot;)
+public class MyBatisConfig {
+}</code></pre><p><strong>业务编写</strong></p>
 <ul>
-<li>修改Spring Boot主类</li>
+<li>业务类</li>
 </ul>
-<p>Spring Boot应用主类上加上mybatis注解即可：</p>
-<p>@MapperScan({“com.baidu.fsg.uid.worker.dao”})</p>
+<pre><code>@Data
+@TableName(&quot;tbl_user&quot;)
+public class User {
+        @TableId(value = &quot;user_id&quot;)
+        private Long userId;
+        private String userName;
+        private Integer userAge;
+}</code></pre><ul>
+<li>Mapper类</li>
+</ul>
+<pre><code>public interface UserMapper extends BaseMapper&lt;User&gt; {
+}</code></pre><ul>
+<li>Service类</li>
+</ul>
+<p>Service接口:</p>
+<pre><code>public interface UserService extends IService&lt;User&gt; {
+        int insertUser( User user );
+        int updateUser( User user );
+        int deleteUser( User user );
+        User findUserByName( String userName );
+        IPage getUserPage( Page page, User user );
+}</code></pre><p>Service实现:</p>
+<pre><code>@Service
+@AllArgsConstructor
+public class UserServiceImpl extends ServiceImpl&lt;UserMapper, User&gt; implements UserService {
+
+    // 增
+    @Override
+    public int insertUser(User user) {
+    return baseMapper.insert( user );
+    }
+
+    // 改
+    @Override
+    public int updateUser(User user) {
+    return baseMapper.updateById( user );
+    }
+
+    // 删
+    @Override
+    public int deleteUser(User user) {
+    return baseMapper.deleteById( user.getUserId() );
+    }
+
+    // 查
+    @Override
+    public User findUserByName( String userName ) {
+    return baseMapper.getUserByName( userName );
+    }
+}</code></pre><ul>
+<li>Controller类</li>
+</ul>
+<pre><code>@RestController
+@RequestMapping(&quot;/user&quot;)
+public class UserContorller {
+
+    @Autowired
+    private UserService userService;
+
+    // 增
+    @PostMapping( value = &quot;/insert&quot;)
+    public Object insert( @RequestBody User user ) {
+    return userService.insertUser( user );
+    }
+
+    // 改
+    @PostMapping( value = &quot;/update&quot;)
+    public Object update( @RequestBody User user ) {
+    return userService.updateUser( user );
+    }
+
+    // 删
+    @PostMapping( value = &quot;/delete&quot;)
+    public Object delete( @RequestBody User user ) {
+    return userService.deleteUser( user );
+    }
+
+    // 查
+    @GetMapping( value = &quot;/getUserByName&quot;)
+    public Object getUserByName( @RequestParam String userName ) {
+    return userService.findUserByName( userName );
+    }
+}</code></pre><p>通过以上几个简单的步骤，我们就实现了 tbl_user表的增删改查，传统 MyBatis的 XML文件一个都不需要写！</p>
 <ul>
-<li>代码使用方式</li>
+<li>启动项目</li>
 </ul>
-<p>@RestController<br>public class TestController {</p>
-<p>  @Autowired<br>  private UidGenService uidGenService;</p>
-<p>  @GetMapping(“/uid”)<br>  public String genUid() {<br>    return String.valueOf(“本次生成的唯一ID号为：”+uidGenService.getUid());<br>  }<br>}</p>
-<p>怎么样，用法超级简单吧：</p>
-<p>1.首先用 Autowired的方式引入UidGenService类；<br>2.直接调用UidGenService类的getUid()方法即可获得一个Long型的 ID号</p>
+<p>接下来通过 Postman来发送增删改查的请求</p>
 <ul>
-<li>运行效果</li>
+<li>插入记录</li>
 </ul>
-<p><img src="/2019/11/08/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter/result.jpg" alt></p>
+<p>通过 Postman随便插入几条记录 POST localhost:8089/user/insert</p>
+<pre><code>{&quot;userId&quot;:3,&quot;userName&quot;:&quot;刘能&quot;,&quot;userAge&quot;:&quot;58&quot;}
+{&quot;userId&quot;:4,&quot;userName&quot;:&quot;赵四&quot;,&quot;userAge&quot;:&quot;58&quot;}
+{&quot;userId&quot;:5,&quot;userName&quot;:&quot;谢广坤&quot;,&quot;userAge&quot;:&quot;58&quot;}
+{&quot;userId&quot;:6,&quot;userName&quot;:&quot;刘大脑袋&quot;,&quot;userAge&quot;:&quot;58&quot;}</code></pre><ul>
+<li>修改记录</li>
+</ul>
+<p>修改记录时需要带用户ID，比如我们修改 赵四 那条记录的名字为 赵四（Zhao Four）</p>
+<ul>
+<li>删除记录</li>
+</ul>
+<p>修改记录时同样需要带用户ID，比如删除ID=6 那条 刘大脑袋的记录</p>
+<ul>
+<li>查询记录（普通查询，下文讲分页查询）</li>
+</ul>
+<p>比如，按照名字来查询：GET localhost:8089/user/getUserByName?userName=刘能</p>
+<p><strong>最关心的分页问题</strong></p>
+<ul>
+<li>首先装配分页插件</li>
+</ul>
+<pre><code>@Bean
+public PaginationInterceptor paginationInterceptor() {
+    return new PaginationInterceptor();
+}</code></pre><ul>
+<li>Mapper类</li>
+</ul>
+<pre><code>public interface UserMapper extends BaseMapper&lt;User&gt; {
+
+    // 普通查询
+    User getUserByName( String userName );
+
+    // 分页查询
+    IPage&lt;List&lt;User&gt;&gt; getUsersPage( Page page, @Param(&quot;query&quot;) User user );
+}</code></pre><ul>
+<li>Service类</li>
+</ul>
+<pre><code>@Service
+@AllArgsConstructor
+public class UserServiceImpl extends ServiceImpl&lt;UserMapper, User&gt; implements UserService {
+
+    // 查：普通查
+    @Override
+    public User findUserByName( String userName ) {
+    return baseMapper.getUserByName( userName );
+    }
+
+    // 分页查
+    @Override
+    public IPage getUserPage(Page page, User user) {
+    return baseMapper.getUsersPage( page, user );
+    }
+}</code></pre><ul>
+<li>Controller类</li>
+</ul>
+<pre><code>@GetMapping( value = &quot;/page&quot;)
+public Object getUserPage( Page page, User user ) {
+    return userService.getUserPage( page, user );
+}</code></pre><p>实际实验一下，我们分页查询 年龄 = 58 的多条记录</p>
+<p>可以看到结果数据中，除了给到当前页数据，还把总记录条数，总页数等一并返回了，很是优雅呢 </p>
 
       
 
@@ -236,6 +394,11 @@
                   <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/wx.png">
+                      <span class="reward-type">微信</span>
+                    </div>
                     
                   </div>
                 </span>
@@ -254,7 +417,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">SPRING BOOT</a>
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">MYBATIS,SQL,SPRINGBOOT</a>
         		</li>
       		
 		</ul>
@@ -310,7 +473,7 @@
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/11/08/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%B5%81%E6%B0%B4%E5%8F%B7ID%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9Aid-spring-boot-starter/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/11/08/Mybatis-Plus/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -325,8 +488,8 @@
 <nav id="article-nav">
   
   
-    <a href="/2019/03/02/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%86%99%E7%AE%80%E5%8E%86%E6%97%B6%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E7%9A%84%E6%8A%80%E6%9C%AF%E8%AF%8D%E6%B1%87%E6%8B%BC%E5%86%99/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">程序员写简历时必须注意的技术词汇拼写</div>
+    <a href="/2019/11/08/id-spring-boot-starter/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">封装一个流水号ID生成器：id-spring-boot-starter</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -450,6 +613,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">MYBATIS,SQL,SPRINGBOOT</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">SPRING BOOT</a>
