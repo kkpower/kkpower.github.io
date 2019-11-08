@@ -22,6 +22,10 @@
   
     <link rel="alternative" href="/atom.xml" title="C Ren" type="application/atom+xml">
   
+   
+  <link rel="stylesheet" href="/lib/gitalk/gitalk.css">
+  <script src="/lib/gitalk/gitalk.min.js"></script>
+  
   
     <link rel="icon" href="/favicon.png">
   
@@ -35,10 +39,6 @@
   
 
   
-
-  
-  <link rel="stylesheet" href="/lib/gitalk/gitalk.css">
-  <script src="/lib/gitalk/gitalk.min.js"></script>
 
 </head>
 
@@ -493,26 +493,50 @@
 
   
 
-
-<div class="gitalk">
-    <div id="gitalk-container"></div>
-    <script type="text/javascript">
-        const gitalk = new Gitalk({
-            clientID: 'Iv1.d23cdc136f65bd6e',
-            clientSecret: 'a1a46766aa94a477381345281cf8370a6819c299',
-            repo: 'https://github.com/kkpower/mygitalk.git',
-            owner: 'kkpower',
-            admin: ['kkpower'],
-            id: md5(location.pathname),      // Ensure uniqueness and length less than 50
-            distractionFreeMode: false  // Facebook-like distraction free mode
-        })
- 
-        gitalk.render('gitalk-container')
-    </script>
-</div>
-
-
   
+
+  <div id="gitalk-container" style="padding: 0px 30px 0px 30px;"></div> 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+
+if(true){
+	var gitalk = new Gitalk({
+  	clientID: '',
+  	clientSecret: '',
+  	repo: 'blog-comments',
+  	owner: '',
+  	admin: [''],
+  	id: 'Sat Mar 02 2019 11:54:36 GMT+0800',
+  	distractionFreeMode: ''
+})
+gitalk.render('gitalk-container') 
+}
+</script>
+  
+
+
+<div id="gitalk-container" style="padding: 0px 30px 0px 30px;"></div> 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+
+if(true){
+	var gitalk = new Gitalk({
+  	clientID: '',
+  	clientSecret: '',
+  	repo: 'blog-comments',
+  	owner: '',
+  	admin: [''],
+  	id: 'Sat Mar 02 2019 11:54:36 GMT+0800',
+  	distractionFreeMode: ''
+})
+gitalk.render('gitalk-container') 
+}
+</script>
+、
 
   
 
