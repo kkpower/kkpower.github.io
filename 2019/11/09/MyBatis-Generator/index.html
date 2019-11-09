@@ -6,20 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>封装一个流水号ID生成器：id-spring-boot-starter | C Ren</title>
+  <title>MyBatis-Generator | C Ren</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="别再用数据库自增ID，UUID了，用流水号生成器生成吧">
-<meta name="keywords" content="SPRING BOOT">
+  <meta name="description" content="这种自动化工具越多越好啊！">
+<meta name="keywords" content="MYBATIS,MYBATIS GRNERATOR,SQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="封装一个流水号ID生成器：id-spring-boot-starter">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;id-spring-boot-starter&#x2F;index.html">
+<meta property="og:title" content="MyBatis-Generator">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;MyBatis-Generator&#x2F;index.html">
 <meta property="og:site_name" content="C Ren">
-<meta property="og:description" content="别再用数据库自增ID，UUID了，用流水号生成器生成吧">
+<meta property="og:description" content="这种自动化工具越多越好啊！">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;id-spring-boot-starter&#x2F;result.jpg">
-<meta property="og:updated_time" content="2019-11-08T08:46:54.407Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;MyBatis-Generator&#x2F;Profile.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;MyBatis-Generator&#x2F;database.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;MyBatis-Generator&#x2F;MyBatis-Generator-Maven.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;MyBatis-Generator&#x2F;%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%9A%84%E8%BF%87%E7%A8%8B%E5%92%8C%E7%BB%93%E6%9E%9C.png">
+<meta property="og:updated_time" content="2019-11-09T09:32:26.044Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;id-spring-boot-starter&#x2F;result.jpg">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;MyBatis-Generator&#x2F;Profile.jpg">
   
     <link rel="alternative" href="/atom.xml" title="C Ren" type="application/atom+xml">
   
@@ -150,14 +153,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-id-spring-boot-starter" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-MyBatis-Generator" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      封装一个流水号ID生成器：id-spring-boot-starter
+      MyBatis-Generator
     </h1>
   
 
@@ -168,68 +171,155 @@
               <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
         </span>
 
-<a href="/2019/11/08/id-spring-boot-starter/" class="archive-article-date">
-  	<time datetime="2019-11-08T07:43:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
+<a href="/2019/11/09/MyBatis-Generator/" class="archive-article-date">
+  	<time datetime="2019-11-09T09:11:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-09</time>
 </a>
         
       </header>
       <div align="center" class="post-count">
-    字数：521字 | 预计阅读时长：2分钟
+    字数：1.1k字 | 预计阅读时长：4分钟
 </div>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>别再用数据库自增ID，UUID了，用流水号生成器生成吧</p>
+        <p>这种自动化工具越多越好啊！</p>
 <a id="more"></a>
 
+
+<p><img src="/2019/11/09/MyBatis-Generator/Profile.jpg" alt></p>
 <p><strong>概述</strong></p>
-<p>ID号生成器（或：全局唯一ID生成器）是服务端系统的基础设施，而且ID号这个东西基本搞后端开发的程序员天天都要接触。而关于ID生成的算法现在业界首屈一指的当属Snowflake雪花算法。</p>
-<p>UidGenerator正是百度开源的一款基于Snowflake雪花算法实现的高性能唯一ID生成器。在本号前文中已经详细使用过UidGenerator，但使用过程还是比较繁杂，还需要自己去引UidGenerator组件的源码，感觉有点不方便。为此本文基于UidGenerator，再来封装一套更利于Spring Boot项目使用的ID号生成组件，命名为id-spring-boot-starter，一看名字就知道是开箱即用的。</p>
-<p><strong>用法</strong></p>
+<p>MyBatis Generator (简称 MBG) 是一个用于 MyBatis和 iBATIS的代码生成器。它可以为 MyBatis的所有版本以及 2.2.0之后的 iBATIS版本自动生成 ORM层代码，典型地包括我们日常需要手写的 POJO、mapper xml 以及 mapper 接口等。MyBatis Generator 自动生成的 ORM层代码几乎可以应对大部分 CRUD 数据表操作场景，可谓是一个生产力工具啊！</p>
+<p><strong>数据库准备与工程搭建</strong></p>
 <ul>
-<li><p>导入sql脚本</p>
-<p>  DROP TABLE IF EXISTS WORKER_NODE;<br>  CREATE TABLE WORKER_NODE<br>  (<br>  ID BIGINT NOT NULL AUTO_INCREMENT COMMENT ‘auto increment id’,<br>  HOST_NAME VARCHAR(64) NOT NULL COMMENT ‘host name’,<br>  PORT VARCHAR(64) NOT NULL COMMENT ‘port’,<br>  TYPE INT NOT NULL COMMENT ‘node type: ACTUAL or CONTAINER’,<br>  LAUNCH_DATE DATE NOT NULL COMMENT ‘launch date’,<br>  MODIFIED TIMESTAMP NOT NULL COMMENT ‘modified time’,<br>  CREATED TIMESTAMP NOT NULL COMMENT ‘created time’,<br>  PRIMARY KEY(ID)<br>  )<br>   COMMENT=’DB WorkerID Assigner for UID Generator’,ENGINE = INNODB</p>
+<li>首先我们准备一个 MySQL数据表 user_info用于下文实验</li>
+</ul>
+<p>里面插入了若干条数据:</p>
+<p><img src="/2019/11/09/MyBatis-Generator/database.png" alt></p>
+<ul>
+<li><p>新建一个Spring Boot 工程</p>
+</li>
+<li><p>引入 MyBatis Generator 依赖</p>
+  <dependency>
+      <groupId>org.mybatis.generator</groupId>
+      <artifactId>mybatis-generator-core</artifactId>
+      <version>1.3.7</version>
+      <scope>provided</scope>
+  </dependency>
+
+
 </li>
 </ul>
-<p>这一步肯定是省不掉，毕竟UidGenerator需要数据库支持</p>
 <ul>
-<li>pom中加入依赖</li>
-</ul>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;cn.codesheep&lt;/groupId&gt;
-    &lt;artifactId&gt;id-spring-boot-starter&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0&lt;/version&gt;
-&lt;/dependency&gt;</code></pre><ul>
-<li><p>配置数据库连接</p>
-<p>  url: jdbc:mysql://xxx.xxx.xxx.xxx:3306/demo?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;useOldAliasMetadataBehavior=true&amp;connectionCollation=utf8mb4_unicode_ci&amp;rewriteBatchedStatements=true&amp;allowMultiQueries=true<br>  username: xxxxxx<br>  password: xxxxxx</p>
+<li><p>引入 MyBatis Generator Maven 插件</p>
+  <plugin>
+      <groupId>org.mybatis.generator</groupId>
+      <artifactId>mybatis-generator-maven-plugin</artifactId>
+      <version>1.3.7</version>
+
+<pre><code>&lt;configuration&gt;
+&lt;configurationFile&gt;src/main/resources/mybatis-generator.xml&lt;/configurationFile&gt;
+&lt;overwrite&gt;true&lt;/overwrite&gt;
+&lt;/configuration&gt;
+
+&lt;dependencies&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;version&gt;8.0.12&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>  </plugin>
+
+
 </li>
 </ul>
-<p>还是因为UidGenerator需要数据库支持</p>
+<p>MyBatis Generator Maven 插件引入以后，我们可以在 Spring Boot工程的 Maven插件工具栏中看到新增的插件选项，类似下图</p>
+<p><img src="/2019/11/09/MyBatis-Generator/MyBatis-Generator-Maven.png" alt></p>
+<p><strong>准备 MyBatis Generator 配置文件</strong></p>
+<pre><code>MyBatis Generator 也需要一个 xml格式的配置文件，该文件的位置配在了上文 引入 MyBatis Generator Maven 插件的 xml配置里，即src/main/resources/mybatis-generator.xml，下面给出本文所使用的配置：
+
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE generatorConfiguration
+    PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;
+    &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;
+
+&lt;generatorConfiguration&gt;
+
+    &lt;context id=&quot;MySql&quot; defaultModelType=&quot;flat&quot;&gt;     
+
+    &lt;plugin type=&quot;org.mybatis.generator.plugins.SerializablePlugin&quot; /&gt;
+
+    &lt;jdbcConnection
+        driverClass=&quot;com.mysql.jdbc.Driver&quot;
+        connectionURL=&quot;jdbc:mysql://121.196.123.245:3306/demo&quot;
+        userId=&quot;root&quot;
+        password=&quot;xxxxxx&quot; /&gt;
+
+    &lt;javaModelGenerator targetPackage=&quot;cn.codesheep.springbt_mybatis_generator.entity&quot; targetProject=&quot;src/main/java&quot;&gt;&lt;/javaModelGenerator&gt;
+
+    &lt;sqlMapGenerator targetPackage=&quot;mapper&quot;  targetProject=&quot;src/main/resources&quot;&gt;&lt;/sqlMapGenerator&gt;
+
+    &lt;javaClientGenerator targetPackage=&quot;cn.codesheep.springbt_mybatis_generator.mapper&quot; targetProject=&quot;src/main/java&quot; type=&quot;XMLMAPPER&quot;&gt;&lt;/javaClientGenerator&gt;
+
+    &lt;table tableName=&quot;user_info&quot;&gt;
+        &lt;property name=&quot;modelOnly&quot; value=&quot;false&quot;/&gt;
+    &lt;/table&gt;
+
+    &lt;/context&gt;
+
+&lt;/generatorConfiguration&gt;</code></pre><p>上面 xml中几个关键的配置简介如下：</p>
 <ul>
-<li>修改Spring Boot主类</li>
+<li>&lt; jdbcConnection /&gt; 数据库连接配置，至关重要</li>
+<li><javaModelGenerator> 指定自动生成的 POJO置于哪个包下</javaModelGenerator></li>
+<li><sqlMapGenerator> 指定自动生成的 mapper.xml置于哪个包下</sqlMapGenerator></li>
+<li><javaClientGenerator> 指定自动生成的 DAO接口置于哪个包下</javaClientGenerator></li>
+<li><table> 指定数据表名，可以使用_和%通配符
+
+
+</table></li>
 </ul>
-<p>Spring Boot应用主类上加上mybatis注解即可：</p>
-<pre><code>@MapperScan({&quot;com.baidu.fsg.uid.worker.dao&quot;})</code></pre><ul>
-<li>代码使用方式</li>
-</ul>
-<pre><code>@RestController
-public class TestController {
-
-        @Autowired
-        private UidGenService uidGenService;
-
-        @GetMapping(&quot;/uid&quot;)
-        public String genUid() {
-            return String.valueOf(&quot;本次生成的唯一ID号为：&quot;+uidGenService.getUid());
-        }
-
-}</code></pre><p>怎么样，用法超级简单吧：</p>
-<p>1.首先用 Autowired的方式引入UidGenService类；<br>2.直接调用UidGenService类的getUid()方法即可获得一个Long型的 ID号</p>
+<p>更多关于 MyBatis Generator 配置的内容，可以移步 <a href="http://mybatis.org/generator/" target="_blank" rel="noopener">官方文档</a>。</p>
+<p><del>~</del></p>
+<p><strong>运行 MyBatis Generator</strong></p>
+<p>直接通过 IDEA的 Maven图形化插件来运行 MyBatis Generator，其自动生成的过程 和 生成的结果如下图所示：</p>
+<p><img src="/2019/11/09/MyBatis-Generator/%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%9A%84%E8%BF%87%E7%A8%8B%E5%92%8C%E7%BB%93%E6%9E%9C.png" alt></p>
+<p>很明显，通过 MyBatis Generator，已经很方便的帮我们自动生成了 POJO、mapper xml 以及 mapper接口，接下来我们看看自动生成的代码怎么用！</p>
+<p><strong>自动生成的代码如何使用</strong></p>
+<p>我们发现通过 MyBatis Generator自动生成的代码中带有一个 Example文件，比如上文中的 UserInfoExample，其实 Example文件对于平时快速开发还是有很大好处的，它能节省很多写 sql语句的时间，举几个实际的例子吧：</p>
 <ul>
-<li>运行效果</li>
+<li>单条件模糊搜索 + 排序</li>
 </ul>
-<p><img src="/2019/11/08/id-spring-boot-starter/result.jpg" alt></p>
+<p>在我们的例子中，假如我想通过用户名 user_name来在 MySQL数据表 user_info中进行模糊搜索，并对结果进行排序，此时利用UserInfoExample可以方便快速的实现：</p>
+<pre><code>@Autowired
+private UserInfoMapper userInfoMapper;
 
+public List&lt;UserInfo&gt; searchUserByUserName( String userName ) {
+
+    UserInfoExample userInfoExample = new UserInfoExample();
+    userInfoExample.createCriteria().andUserNameLike( &apos;%&apos;+ userName +&apos;%&apos; ); // 设置模糊搜索的条件
+
+    String orderByClause = &quot;user_name DESC&quot;;
+    userInfoExample.setOrderByClause( orderByClause );  // 设置通过某个字段排序的条件
+
+    return userInfoMapper.selectByExample( userInfoExample );
+}</code></pre><ul>
+<li>多条件精确搜索</li>
+</ul>
+<p>再比如，我们想通过电话号码 phone和用户名 user_name 两个字段来在数据表 user_info中实现精确搜索，则可以如下实现：</p>
+<pre><code>public List&lt;UserInfo&gt; multiConditionsSearch( UserInfo userInfo ) {
+
+    UserInfoExample userInfoExample = new UserInfoExample();
+    UserInfoExample.Criteria criteria = userInfoExample.createCriteria();
+
+    if( !&quot;&quot;.equals(userInfo.getPhone()) )
+    criteria.andPhoneEqualTo( userInfo.getPhone() );
+    if( !&quot;&quot;.equals(userInfo.getUserName()) )
+    criteria.andUserNameEqualTo( userInfo.getUserName() );
+
+    return userInfoMapper.selectByExample( userInfoExample );
+}</code></pre><p>很明显可以看出的是，我们是通过直接编写代码逻辑来取代编写 SQL语句，因此还是十分直观和容易理解的！</p>
+<p><strong>后记</strong></p>
+<h2 id="由于能力有限，若有错误或者不当之处，还请大家批评指正，一起学习交流！"><a href="#由于能力有限，若有错误或者不当之处，还请大家批评指正，一起学习交流！" class="headerlink" title="由于能力有限，若有错误或者不当之处，还请大家批评指正，一起学习交流！"></a>由于能力有限，若有错误或者不当之处，还请大家批评指正，一起学习交流！</h2>
       
 
       
@@ -273,7 +363,7 @@ public class TestController {
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">SPRING BOOT</a>
+        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color5">MYBATIS,MYBATIS GRNERATOR,SQL</a>
         		</li>
       		
 		</ul>
@@ -329,7 +419,7 @@ public class TestController {
     <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2019/11/08/id-spring-boot-starter/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2019/11/09/MyBatis-Generator/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -343,18 +433,9 @@ public class TestController {
   
 <nav id="article-nav">
   
-    <a href="/2019/11/08/Mybatis-Plus/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Mybatis-Plus 真好用（乡村爱情加持）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/03/02/lexical-spelling/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">程序员写简历时必须注意的技术词汇拼写</div>
+    <a href="/2019/11/08/Mybatis-Plus/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Mybatis-Plus 真好用（乡村爱情加持）</div>
       <i class="icon-circle-right"></i>
     </a>
   
