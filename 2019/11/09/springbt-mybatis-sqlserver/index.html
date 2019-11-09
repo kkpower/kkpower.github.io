@@ -6,16 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: MYBATIS,SQL,SPRINGBOOT | C Ren</title>
+  <title>springbt-mybatis-sqlserver | C Ren</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="C Ren个人站，只要涉及后端知识共享、实践教程、前沿技术学习等方面">
-<meta property="og:type" content="website">
-<meta property="og:title" content="C Ren">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;tags&#x2F;MYBATIS-SQL-SPRINGBOOT&#x2F;index.html">
+  <meta name="description" content="本文给出一个完整的Spring Boot + MyBatis + SQL Server工程示例">
+<meta name="keywords" content="MYBATIS,SQL,SPRINGBOOT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springbt-mybatis-sqlserver">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;springbt-mybatis-sqlserver&#x2F;index.html">
 <meta property="og:site_name" content="C Ren">
-<meta property="og:description" content="C Ren个人站，只要涉及后端知识共享、实践教程、前沿技术学习等方面">
+<meta property="og:description" content="本文给出一个完整的Spring Boot + MyBatis + SQL Server工程示例">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;springbt-mybatis-sqlserver&#x2F;Profile.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;springbt-mybatis-sqlserver&#x2F;%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;springbt-mybatis-sqlserver&#x2F;image.png">
+<meta property="og:updated_time" content="2019-11-09T10:00:05.453Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;09&#x2F;springbt-mybatis-sqlserver&#x2F;Profile.jpg">
   
     <link rel="alternative" href="/atom.xml" title="C Ren" type="application/atom+xml">
   
@@ -146,37 +152,270 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-springbt-mybatis-sqlserver" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      springbt-mybatis-sqlserver
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
+
+        
+        
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_page_pv" style='display:none' class="archive-article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
+
 <a href="/2019/11/09/springbt-mybatis-sqlserver/" class="archive-article-date">
   	<time datetime="2019-11-09T09:45:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-09</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/09/springbt-mybatis-sqlserver/">springbt-mybatis-sqlserver</a>
-    </h1>
-  
+        
+      </header>
+      <div align="center" class="post-count">
+    字数：1k字 | 预计阅读时长：5分钟
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文给出一个完整的Spring Boot + MyBatis + SQL Server工程示例</p>
+<a id="more"></a>
 
-        <div class="article-info info-on-right">
-          
+<p><img src="/2019/11/09/springbt-mybatis-sqlserver/Profile.jpg" alt></p>
+<p><strong>概述</strong></p>
+<p>Spring Boot工程集成 MyBatis来实现 MySQL访问的示例我们见过很多，而最近用到了微软的 SQL Server数据库，于是本文则给出一个完整的 Spring Boot + MyBatis + SQL Server 的工程示例。</p>
+<p><strong>工程搭建</strong></p>
+<ul>
+<li>新建 Spring Boot工程</li>
+<li>pom.xml 中添加 MyBatis和 SQL Server相关的依赖</li>
+</ul>
+<pre><code>&lt;!--for mybatis--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;1.3.2&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!--for SqlServer--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.microsoft.sqlserver&lt;/groupId&gt;
+    &lt;artifactId&gt;sqljdbc4&lt;/artifactId&gt;
+    &lt;version&gt;4.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><ul>
+<li>配置 application.properties</li>
+</ul>
+<p>这里同样主要是对于 MyBatis 和 SQL Server连接相关的配置</p>
+<pre><code>server.port=89
+
+# mybatis 配置
+mybatis.type-aliases-package=cn.codesheep.springbt_mybatis_sqlserver.entity
+mybatis.mapper-locations=classpath:mapper/*.xml
+mybatis.configuration.map-underscore-to-camel-case=true
+
+## -------------------------------------------------
+
+## SqlServer 配置
+spring.datasource.url=jdbc:sqlserver://xxxx:1433;databasename=MingLi
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.datasource.username=xxxx
+spring.datasource.password=xxxx</code></pre><p><em>*建立SQL</em></p>
+<ul>
+<li>首先在 SQL Server数据库中新建数据表 user_test作为测试用表</li>
+</ul>
+<pre><code>DROP TABLE [demo].[user_test]
+GO
+CREATE TABLE [dbo].[user_test] (
+[user_id] int NOT NULL ,
+[user_name] varchar(50) NOT NULL ,
+[sex] tinyint NOT NULL ,
+[created_time] varchar(50) NOT NULL 
+)
+
+GO</code></pre><ul>
+<li>然后在我们的工程中对应建立的 User实体类</li>
+</ul>
+<p>其字段和实际数据表的字段一一对应</p>
+<pre><code>public class User {
+
+    private Long userId;
+    private String userName;
+    private Boolean sex;
+    private String createdTime;
+
+    public Long getUserId() {
+    return userId;
+    }
+
+    public void setUserId(Long userId) {
+    this.userId = userId;
+    }
+
+    public String getUserName() {
+    return userName;
+    }
+
+    public void setUserName(String userName) {
+    this.userName = userName;
+    }
+
+    public Boolean getSex() {
+    return sex;
+    }
+
+    public void setSex(Boolean sex) {
+    this.sex = sex;
+    }
+
+    public String getCreatedTime() {
+    return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+    this.createdTime = createdTime;
+    }
+}</code></pre><p><strong>Mybatis Mapper映射配置</strong></p>
+<ul>
+<li>MyBatis映射配置的 XML文件如下：</li>
+</ul>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot; &gt;
+&lt;mapper namespace=&quot;cn.codesheep.springbt_mybatis_sqlserver.mapper.UserMapper&quot;&gt;
+
+    &lt;resultMap id=&quot;userMap&quot; type=&quot;cn.codesheep.springbt_mybatis_sqlserver.entity.User&quot;&gt;
+    &lt;id property=&quot;userId&quot; column=&quot;user_id&quot; javaType=&quot;java.lang.Long&quot;&gt;&lt;/id&gt;
+    &lt;result property=&quot;userName&quot; column=&quot;user_name&quot; javaType=&quot;java.lang.String&quot;&gt;&lt;/result&gt;
+    &lt;result property=&quot;sex&quot; column=&quot;sex&quot; javaType=&quot;java.lang.Boolean&quot;&gt;&lt;/result&gt;
+    &lt;result property=&quot;createdTime&quot; column=&quot;created_time&quot; javaType=&quot;java.lang.String&quot;&gt;&lt;/result&gt;
+    &lt;/resultMap&gt;
+
+    &lt;select id=&quot;getAllUsers&quot; resultMap=&quot;userMap&quot;&gt;
+    select * from user_test
+    &lt;/select&gt;
+
+    &lt;insert id=&quot;addUser&quot; parameterType=&quot;cn.codesheep.springbt_mybatis_sqlserver.entity.User&quot;&gt;
+    insert into user_test ( user_id, user_name, sex, created_time ) values ( #{userId}, #{userName}, #{sex}, #{createdTime} )
+    &lt;/insert&gt;
+
+    &lt;delete id=&quot;deleteUser&quot; parameterType=&quot;cn.codesheep.springbt_mybatis_sqlserver.entity.User&quot;&gt;
+    delete from user_test where user_name = #{userName}
+    &lt;/delete&gt;
+
+&lt;/mapper&gt;</code></pre><ul>
+<li>与此同时，这里也给出对应 XML的 DAO接口</li>
+</ul>
+<pre><code>public interface UserMapper {
+    List&lt;User&gt; getAllUsers();
+    int addUser( User user );
+    int deleteUser( User user );
+}</code></pre><p>为了试验起见，这里给出了 增 / 删 / 查 三个数据库操作动作。</p>
+<p><strong>编写 Service 和测试Controller</strong></p>
+<ul>
+<li>上面这些准备工作完成之后，接下来编写数据库 CRUD的 Service类</li>
+</ul>
+<pre><code>@Service
+@Primary
+public class UserServiceImpl implements IUserService {
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Override
+    public List&lt;User&gt; getAllUsers() {
+    return userMapper.getAllUsers();
+    }
+
+    @Override
+    public int addUser(User user) {
+    SimpleDateFormat form = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);
+    user.setCreatedTime( form.format(new Date()) );
+    return userMapper.addUser( user );
+    }
+
+    @Override
+    public int deleteUser(User user) {
+    return userMapper.deleteUser( user );
+    }
+}</code></pre><p>这里的 Service功能同样主要关于数据表的 增 / 删 / 查 三个数据库操作动作。</p>
+<ul>
+<li>对照着上面的Service，我们编写一个对应接口测试的Controller</li>
+</ul>
+<p>@RestController<br>public class UserController {</p>
+<pre><code>@Autowired
+private IUserService userService;
+
+@RequestMapping(value = &quot;/getAllUser&quot;, method = RequestMethod.GET)
+public List&lt;User&gt; getAllUser() {
+    return userService.getAllUsers();
+}
+
+@RequestMapping(value = &quot;/addUser&quot;, method = RequestMethod.POST)
+public int addUser( @RequestBody User user ) {
+    return userService.addUser( user );
+}
+
+@RequestMapping(value = &quot;/deleteUser&quot;, method = RequestMethod.POST)
+public int deleteUser( @RequestBody User user ) {
+    return userService.deleteUser( user );
+}</code></pre><p>}</p>
+<p><strong>实验测试</strong></p>
+<ul>
+<li>插入数据</li>
+</ul>
+<p>依次用 POSTMAN通过 Post /addUser接口插入三条数据：</p>
+<pre><code>{&quot;userId&quot;:1,&quot;userName&quot;:&quot;刘能&quot;,&quot;sex&quot;:true}
+{&quot;userId&quot;:2,&quot;userName&quot;:&quot;赵四&quot;,&quot;sex&quot;:false}
+{&quot;userId&quot;:3,&quot;userName&quot;:&quot;王大拿&quot;,&quot;sex&quot;:true}</code></pre><ul>
+<li>查询数据</li>
+</ul>
+<p>调用 Get /getAllUser接口，获取刚插入的几条数据</p>
+<p><img src="/2019/11/09/springbt-mybatis-sqlserver/%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE.png" alt></p>
+<ul>
+<li>删除数据</li>
+</ul>
+<p><img src="/2019/11/09/springbt-mybatis-sqlserver/image.png" alt></p>
+<p><strong>后记</strong></p>
+<h3 id="由于能力有限，若有错误或者不当之处，还请大家批评指正，一起学习交流！"><a href="#由于能力有限，若有错误或者不当之处，还请大家批评指正，一起学习交流！" class="headerlink" title="由于能力有限，若有错误或者不当之处，还请大家批评指正，一起学习交流！"></a>由于能力有限，若有错误或者不当之处，还请大家批评指正，一起学习交流！</h3>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" target="_blank" rel="noopener" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/wechat.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -188,58 +427,128 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" target="_blank" rel="noopener" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2019/11/09/springbt-mybatis-sqlserver/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/11/08/Mybatis-Plus/" class="archive-article-date">
-  	<time datetime="2019-11-08T08:50:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/11/09/MyBatis-Generator/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MyBatis-Generator</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/08/Mybatis-Plus/">Mybatis-Plus 真好用（乡村爱情加持）</a>
-    </h1>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+  <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC80NzQ1MC8yMzk1MA==">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">MYBATIS,SQL,SPRINGBOOT</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -270,9 +579,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
