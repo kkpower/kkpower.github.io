@@ -20,7 +20,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;mysql-master-slave&#x2F;c.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;mysql-master-slave&#x2F;b.jpg">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;mysql-master-slave&#x2F;c.jpg">
-<meta property="og:updated_time" content="2019-11-19T14:51:38.854Z">
+<meta property="og:updated_time" content="2019-11-19T15:01:19.566Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;mysql-master-slave&#x2F;a.jpg">
   
@@ -182,7 +182,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>首先，让我们看一个图</strong></p>
+        <p>首先，让我们看一个图</p>
 <a id="more"></a>
 
 <p><img src="/2019/11/19/mysql-master-slave/a.jpg" alt></p>
@@ -219,7 +219,7 @@
 <p>1、从服务器作为主服务器的实时数据备份</p>
 <p>2、主从服务器实现读写分离，从服务器实现负载均衡</p>
 <p>3、把多个从服务器根据业务重要性进行拆分访问</p>
-<p><em>*主从复制实现基本原理</em></p>
+<p><strong>主从复制实现基本原理</strong></p>
 <p>1、复制是MySQL自带的一项功能，允许服务器将更改从一个服务器的一个实例复制到另一个实例。</p>
 <p>2、主服务器将所有数据和结构更改记录到二进制日志中。</p>
 <p>3、从属服务器从主服务器请求该二进制日志并在本地应用其内容。即通过把主库的binlog传送到从库，从新解析应用到从库。</p>
@@ -244,11 +244,12 @@
 </ul>
 <p><img src="/2019/11/19/mysql-master-slave/b.jpg" alt></p>
 <ul>
-<li>问题3：主从复制中有master,slave1,slave2,…等等这么多MYSQL数据库，那比如一个JAVA WEB应用到底应该连接哪个数据库?</li>
+<li><p>问题3：主从复制中有master,slave1,slave2,…等等这么多MYSQL数据库，那比如一个JAVA WEB应用到底应该连接哪个数据库?</p>
+<p>  当 然，我们在应用程序中可以这样，insert/delete/update这些更新数据库的操作，用connection(for master)进行操作，select用connection(for slaves)进行操作。那我们的应用程序还要完成怎么从slaves选择一个来执行select，例如简单的轮循算法。</p>
+<p>  这样的话，相当于应用程序完成了SQL语句的路由，而且与MYSQL的主从复制架构非常关联，一旦master挂了，某些slave挂了，那么应用程序就要修改了。能不能让应用程序与MYSQL的主从复制架构没有什么太多关系呢？可以看下面的图：</p>
+</li>
 </ul>
-<pre><code>当 然，我们在应用程序中可以这样，insert/delete/update这些更新数据库的操作，用connection(for master)进行操作，select用connection(for slaves)进行操作。那我们的应用程序还要完成怎么从slaves选择一个来执行select，例如简单的轮循算法。
-
-这样的话，相当于应用程序完成了SQL语句的路由，而且与MYSQL的主从复制架构非常关联，一旦master挂了，某些slave挂了，那么应用程序就要修改了。能不能让应用程序与MYSQL的主从复制架构没有什么太多关系呢？可以看下面的图：</code></pre><p><img src="/2019/11/19/mysql-master-slave/c.jpg" alt></p>
+<p><img src="/2019/11/19/mysql-master-slave/c.jpg" alt></p>
 <pre><code>找一个组件，application program只需要与它打交道，用它来完成MYSQL的代理，实现SQL语句的路由。
 
 mysql proxy并不负责，怎么从众多的slaves挑一个？可以交给另一个组件(比如haproxy)来完成。
@@ -567,19 +568,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">SPRING BOOT</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">Thread pool</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">SPRING BOOT</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">面试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">MySQL</a>
               </li>
             
             <div class="clearfix"></div>
