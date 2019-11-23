@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="我的爪洼">
 <meta property="og:description" content="秒杀干货分享！！">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-23T04:57:01.442Z">
+<meta property="og:updated_time" content="2019-11-23T07:22:08.223Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="我的爪洼" type="application/atom+xml">
@@ -172,7 +172,7 @@
         
       </header>
       <div align="center" class="post-count">
-    字数：1.8k字 | 预计阅读时长：6分钟
+    字数：1.9k字 | 预计阅读时长：7分钟
 </div>
     
     <div class="article-entry" itemprop="articleBody">
@@ -214,7 +214,11 @@
 <figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span>   <span class="title">SecKillMessageListener</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> OrderService orderService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JmsListener</span>(destination = <span class="string">"seckill"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(String message)</span></span>&#123;</span><br><span class="line">	<span class="comment">//获取消息队列中的订单数据并转换成Orders对象</span></span><br><span class="line">	Orders orders= JSONObject.parseObject(message,Orders<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="comment">//调用订单业务方法完成数据库的下单，如果返回值为0表示下单成功</span></span><br><span class="line">	<span class="keyword">int</span> result= orderService.addSecKillOrder(orders);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>4、下单</strong></p>
-<figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">addSecKillOrder</span><span class="params">(Orders orders)</span> </span>&#123;</span><br><span class="line">    redisTemplate.setValueSerializer(stringRedisSerializer);</span><br><span class="line">    redisTemplate.setKeySerializer(stringRedisSerializer);</span><br><span class="line">    Goods goods= goodsMapper.selectByPrimaryKey(orders.getGoodsid());</span><br><span class="line"></span><br><span class="line">    orders.setCreatetime(<span class="keyword">new</span> Date());</span><br><span class="line">    orders.setStatus(<span class="number">1</span>);<span class="comment">//订单状态1 表示未支付</span></span><br><span class="line">    orders.setBuynum(<span class="number">1</span>);</span><br><span class="line">    orders.setBuyprice(goods.getPrice());</span><br><span class="line">    orders.setOrdermoney(goods.getPrice().multiply(<span class="keyword">new</span> BigDecimal(orders.getBuynum())));</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        <span class="comment">//这里可能会出现异常，当消息队列中有重复数据时这里就可能会出现异常，违反数据库的唯一约束</span></span><br><span class="line">        <span class="comment">//这种情况表示这条消息（订单）已经进入了数据库中我们应该跳过这个处理</span></span><br><span class="line">        <span class="comment">//第四次防止用户重复购买的操作</span></span><br><span class="line">        ordersMapper.insert(orders);</span><br><span class="line">        <span class="comment">//使用固定的前缀+用户id+商品id 作为key 使用订单的记录作为value将下单成功的结果写入Redis中用于通知用户进行支付</span></span><br><span class="line">        redisTemplate.opsForValue().set(Constants.ORDER_RESULT+orders.getUid()+orders.getGoodsid(), JSONObject.toJSONString(orders));</span><br><span class="line">        redisTemplate.delete(Constants.ORDERS+orders.getGoodsid()+orders.getUid());</span><br><span class="line">    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        <span class="comment">//进入catch可能是因为违反唯一约束表示消息已经处理过了应该从Redis中移除订单记录</span></span><br><span class="line">        <span class="comment">//基本上Redis中的订单早就被移除了，以防万一</span></span><br><span class="line">        redisTemplate.delete(Constants.ORDERS+orders.getGoodsid()+orders.getUid());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">addSecKillOrder</span><span class="params">(Orders orders)</span> </span>&#123;</span><br><span class="line">    redisTemplate.setValueSerializer(stringRedisSerializer);</span><br><span class="line">    redisTemplate.setKeySerializer(stringRedisSerializer);</span><br><span class="line">    Goods goods= goodsMapper.selectByPrimaryKey(orders.getGoodsid());</span><br><span class="line"></span><br><span class="line">    orders.setCreatetime(<span class="keyword">new</span> Date());</span><br><span class="line">    orders.setStatus(<span class="number">1</span>);<span class="comment">//订单状态1 表示未支付</span></span><br><span class="line">    orders.setBuynum(<span class="number">1</span>);</span><br><span class="line">    orders.setBuyprice(goods.getPrice());</span><br><span class="line">    orders.setOrdermoney(goods.getPrice().multiply(<span class="keyword">new</span> BigDecimal(orders.getBuynum())));</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        <span class="comment">//这里可能会出现异常，当消息队列中有重复数据时这里就可能会出现异常，违反数据库的唯一约束</span></span><br><span class="line">        <span class="comment">//这种情况表示这条消息（订单）已经进入了数据库中我们应该跳过这个处理</span></span><br><span class="line">        <span class="comment">//第四次防止用户重复购买的操作</span></span><br><span class="line">        ordersMapper.insert(orders);</span><br><span class="line">        <span class="comment">//使用固定的前缀+用户id+商品id 作为key 使用订单的记录作为value将下单成功的结果写入Redis中用于通知用户进行支付</span></span><br><span class="line">        redisTemplate.opsForValue().set(Constants.ORDER_RESULT+orders.getUid()+orders.getGoodsid(), JSONObject.toJSONString(orders));</span><br><span class="line">        redisTemplate.delete(Constants.ORDERS+orders.getGoodsid()+orders.getUid());</span><br><span class="line">    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        <span class="comment">//进入catch可能是因为违反唯一约束表示消息已经处理过了应该从Redis中移除订单记录</span></span><br><span class="line">        <span class="comment">//基本上Redis中的订单早就被移除了，以防万一</span></span><br><span class="line">        redisTemplate.delete(Constants.ORDERS+orders.getGoodsid()+orders.getUid());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>5、下单成功后通知用户去支付</strong></p>
+<figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line">   <span class="function"><span class="keyword">public</span> ReturnObject <span class="title">getOrderResult</span><span class="params">(Integer uid, Integer goodsId)</span> </span>&#123;</span><br><span class="line">       redisTemplate.setValueSerializer(stringRedisSerializer);</span><br><span class="line">       redisTemplate.setKeySerializer(stringRedisSerializer);</span><br><span class="line">       ReturnObject returnObject=<span class="keyword">new</span> ReturnObject();</span><br><span class="line"><span class="comment">//从Redis中获取用户订单信息</span></span><br><span class="line">       String strOrder= (String) redisTemplate.opsForValue().get(Constants.ORDER_RESULT+uid+goodsId);</span><br><span class="line">       <span class="keyword">if</span>(strOrder==<span class="keyword">null</span>)&#123;</span><br><span class="line">           returnObject.setCode(Constants.ERROR);</span><br><span class="line">           returnObject.setResult(<span class="string">""</span>);</span><br><span class="line">           returnObject.setMessage(<span class="string">"没有订单"</span>);</span><br><span class="line">           <span class="keyword">return</span> returnObject;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       returnObject.setCode(Constants.OK);</span><br><span class="line">       returnObject.setResult(JSONObject.parseObject(strOrder,Orders<span class="class">.<span class="keyword">class</span>))</span>;</span><br><span class="line">       returnObject.setMessage(<span class="string">"订单获取成功"</span>);</span><br><span class="line">       <span class="keyword">return</span> returnObject;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>之后就可以使用支付宝沙箱环境进行测试了！！</p>
 
       
 
@@ -487,11 +491,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">MYBATIS,SQL,SPRINGBOOT</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">Thread pool</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">面试</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">MYBATIS,SQL,SPRINGBOOT</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -499,7 +503,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">Thread pool</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -507,7 +511,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">面试</a>
               </li>
             
             <div class="clearfix"></div>
