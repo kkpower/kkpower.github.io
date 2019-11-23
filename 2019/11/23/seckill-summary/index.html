@@ -6,15 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | 我的爪洼</title>
+  <title>秒杀总结 | 我的爪洼</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人博客，主要涉及后端知识共享、实践教程、前沿技术学习等方面">
-<meta property="og:type" content="website">
-<meta property="og:title" content="我的爪洼">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;archives&#x2F;index.html">
+  <meta name="description" content="秒杀干货分享！！">
+<meta name="keywords" content="SPRINGBOOT,Redis,ActiveMQ,MYBATIS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="秒杀总结">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;23&#x2F;seckill-summary&#x2F;index.html">
 <meta property="og:site_name" content="我的爪洼">
-<meta property="og:description" content="个人博客，主要涉及后端知识共享、实践教程、前沿技术学习等方面">
+<meta property="og:description" content="秒杀干货分享！！">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-23T03:57:52.145Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="我的爪洼" type="application/atom+xml">
@@ -146,37 +148,173 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-seckill-summary" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/11/23/seckill-summary/" class="archive-article-date">
-  	<time datetime="2019-11-23T03:09:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-23</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/23/seckill-summary/">秒杀总结</a>
+    <h1 class="article-title" itemprop="name">
+      秒杀总结
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_page_pv" style='display:none' class="archive-article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
+
+<a href="/2019/11/23/seckill-summary/" class="archive-article-date">
+  	<time datetime="2019-11-23T03:09:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-23</time>
+</a>
+        
+      </header>
+      <div align="center" class="post-count">
+    字数：1.8k字 | 预计阅读时长：6分钟
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>秒杀干货分享！！</p>
+<a id="more"></a>
+
+<p><strong>秒杀开始前将几分钟执行一次定时任务将数据库的要秒杀的商品写入到Redis中</strong></p>
+<p><strong>1、用户在进入商品详情页后</strong></p>
+<pre><code>秒杀未开始显示秒杀倒计时
+秒杀已开始显示秒杀按钮
+秒杀已结束显示秒杀结束
+通过ajax异步获取服务端系统的当前时间与它们进行比较</code></pre><p><strong>2、用户在商品详情页点击秒杀按钮后</strong><br>    （1）从Redis中获取商品信息。<br>        false-&gt;（表示没有获取到商品信息，可能原因是用户手动发送的请求）<br>        return-&gt;（商品信息异常！请确认！）</p>
+<pre><code>（2）验证秒杀活动是否开始。
+    false-&gt;（表示活动未开始，原因是可能用户手动发送请求）
+    return-&gt;(秒杀活动还没有开始请稍后再试)
+
+（3）验证秒杀活动是否已经结束。
+    false-&gt;（表示活动已结束，原因是可能用户手动发送请求）
+    return-&gt;(秒杀活动已结束，拜拜~)
+
+（4）拿到商品的随机签名（唯一标识）返回给前端
+
+（5）ajax发送请求携带商品id和商品随机签名参数
+
+（6）验证是否携带id和随机签名
+    false-&gt;(表示请求中没有携带id或随机名，由于使用了RestFul请求那么请求必须符合路径规则，那么这个情况几乎不可能发生)
+    return-&gt;（商品信息异常！请确认！）</code></pre><p><strong>具体的秒杀业务逻辑处理funName:secKill（service）</strong></p>
+<pre><code>(1)验证商品唯一标识是否合法，商品是否存在
+    false-&gt;（这里可能是因为用户手动发送请求）
+    return-&gt;（您所秒杀的商品异常！）
+
+(2)验证商品库存
+    false
+    return-&gt;（对不起！您所购买的商品已被抢光）
+
+(3)根据固定的前缀+商品随机签名+用户id来判断当前用户是否购买过这个商品
+    true-&gt;（表示当前用户已经购买过这个商品了，拒绝请求继续执行，第二次控制用户重复提交购买，这里不能100%拦截用户重复购买）
+    return-&gt;(对不起！您已经购买过这个商品了！)
+
+(4)增加限流人数 ，人数+1 ，并返回本次增加的结果 (限流人数1000)
+    if-&gt;(如果自增后的返回值大于1000则进入if表示用户超出限流人数)
+    true-&gt;(达到限流人数以后 减少一个限流人数，回滚刚刚的自动增长)
+    return-&gt;(对不起！服务器繁忙请稍后再试！)
+
+(5)创建订单对象，用于Redis记录订单防止调单和将订单存入队列用于通知订单系统完成数据库的下单操作
+
+(6)@return：ReturnObject
+   利用Redis的事务来解决商品超卖问题     execute执行成功后返回一个数据利用这个数据判断事务是否执行成功
+    1、监控商品库存防止超卖，监控限购的key防止用户重复购买。
+            监控Redis中的key同时锁定key所对应的记录
+    2、判断库存
+        return
+
+    3、判断当前用户已经购买过商品了
+        return
+
+    4、开启事务multi
+        程序到了这里表示用户没有购买过这个商品，但是却不一定购买成功
+
+    5、添加一个限购记录 使用任意非null的数据作为value即可
+
+    6、Redis中记录订单信息，防止掉单行为
+           使用固定前缀+商品id+用户id作为key ，使用订单对象的JSON数据作为value
+           然后可以开启定时任务，定期扫描Redis判断那么订单没有完成，如果没有完成及向消息队列中写入一条数据
+           当数据库下单成功之后可以将这个数据从Redis中移除
+
+    5、执行事务exec
+        如果执行成功返回一个List集合，集合中拥有数据，如果事务执行失败返回一个List集合，集合中没有数据
+        失败的原因可能是其他线程修改了我们监控的key，可能库存减少了，或限购增加了
+
+(7)程序到了这里表示Redis事务执行方法返回值为ReturnObject 表示在执行事务之前就已经返回了，可能没有库存或当前用户已经购买了
+    if(result instanceof  ReturnObject){
+        return (ReturnObject) result; //程序结束
+    }
+(8)进入if表示返回值result是List类型表示Redis的事务已经提交了，但是没有提交成功
+       原因是可有其他的线程修改了数据（但是具体什么原因不详）
+       这里不能直接判断是否是错误或其他异常，可能仅仅就是库存被修改了但是还有剩余，处理方式有2种
+       1、直接返回给用户一个提示，提示服务器繁忙（这种情况可能会造成大量用户被返回页面）
+       2、递归调用自动进入下一轮的抢购，重新执行业务逻辑，这样可能会导致请求时间过长
+{% codeblock [lang:Java] %}
+		List list= (List) result
+		   if(list.isEmpty()){
+		    //递归前减少限流人数，防止一个用户占用2个限流位置
+		    redisTemplate.opsForValue().decrement(Constants.CURRENT_LIMITING);
+		    return this.secKill(goodsId,randomName,uid);
+		}
+	{% endcodeblock %}
+
+(9)将消息对象的JSON存入MQ中，通知订单系统来完成商品的下单操作
+{% codeblock [lang:Java] %}
+		jmsTemplate.send(new MessageCreator() {
+		    @Override
+		    public Message createMessage(Session session) throws JMSException {
+			return session.createTextMessage(JSONObject.toJSONString(orders));
+		    }
+		});
+	{% endcodeblock %}
+
+(10)减少限流人数</code></pre><p><strong>3、创建一个监听器(Listener)</strong></p>
+<figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span>   <span class="title">SecKillMessageListener</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> OrderService orderService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JmsListener</span>(destination = <span class="string">"seckill"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(String message)</span></span>&#123;</span><br><span class="line">	<span class="comment">//获取消息队列中的订单数据并转换成Orders对象</span></span><br><span class="line">	Orders orders= JSONObject.parseObject(message,Orders<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="comment">//调用订单业务方法完成数据库的下单，如果返回值为0表示下单成功</span></span><br><span class="line">	<span class="keyword">int</span> result= orderService.addSecKillOrder(orders);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>4、下单</strong></p>
+<figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">addSecKillOrder</span><span class="params">(Orders orders)</span> </span>&#123;</span><br><span class="line">    redisTemplate.setValueSerializer(stringRedisSerializer);</span><br><span class="line">    redisTemplate.setKeySerializer(stringRedisSerializer);</span><br><span class="line">    Goods goods= goodsMapper.selectByPrimaryKey(orders.getGoodsid());</span><br><span class="line"></span><br><span class="line">    orders.setCreatetime(<span class="keyword">new</span> Date());</span><br><span class="line">    orders.setStatus(<span class="number">1</span>);<span class="comment">//订单状态1 表示未支付</span></span><br><span class="line">    orders.setBuynum(<span class="number">1</span>);</span><br><span class="line">    orders.setBuyprice(goods.getPrice());</span><br><span class="line">    orders.setOrdermoney(goods.getPrice().multiply(<span class="keyword">new</span> BigDecimal(orders.getBuynum())));</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        <span class="comment">//这里可能会出现异常，当消息队列中有重复数据时这里就可能会出现异常，违反数据库的唯一约束</span></span><br><span class="line">        <span class="comment">//这种情况表示这条消息（订单）已经进入了数据库中我们应该跳过这个处理</span></span><br><span class="line">        <span class="comment">//第四次防止用户重复购买的操作</span></span><br><span class="line">        ordersMapper.insert(orders);</span><br><span class="line">        <span class="comment">//使用固定的前缀+用户id+商品id 作为key 使用订单的记录作为value将下单成功的结果写入Redis中用于通知用户进行支付</span></span><br><span class="line">        redisTemplate.opsForValue().set(Constants.ORDER_RESULT+orders.getUid()+orders.getGoodsid(), JSONObject.toJSONString(orders));</span><br><span class="line">        redisTemplate.delete(Constants.ORDERS+orders.getGoodsid()+orders.getUid());</span><br><span class="line">    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        <span class="comment">//进入catch可能是因为违反唯一约束表示消息已经处理过了应该从Redis中移除订单记录</span></span><br><span class="line">        <span class="comment">//基本上Redis中的订单早就被移除了，以防万一</span></span><br><span class="line">        redisTemplate.delete(Constants.ORDERS+orders.getGoodsid()+orders.getUid());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" target="_blank" rel="noopener" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/wechat.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -188,292 +326,128 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" target="_blank" rel="noopener" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" target="_blank" rel="noopener" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2019/11/23/seckill-summary/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/11/19/mysql-master-slave/" class="archive-article-date">
-  	<time datetime="2019-11-19T15:02:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-19</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/11/19/mysql-master-slave/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MySQL主从复制与读写分离原理</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" target="_blank" rel="noopener" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/19/mysql-master-slave/">MySQL主从复制与读写分离原理</a>
-    </h1>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+  <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC80NzQ1MC8yMzk1MA==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/11/14/The-principle-of-thread-pool/" class="archive-article-date">
-  	<time datetime="2019-11-14T00:46:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-14</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/14/The-principle-of-thread-pool/">线程池总结</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">Thread pool</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/11/09/springbt-mybatis-sqlserver/" class="archive-article-date">
-  	<time datetime="2019-11-09T09:45:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/09/springbt-mybatis-sqlserver/">Spring Boot集成 MyBatis和 SQL Server实践</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">MYBATIS,SQL,SPRINGBOOT</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/11/09/MyBatis-Generator/" class="archive-article-date">
-  	<time datetime="2019-11-09T09:11:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/09/MyBatis-Generator/">Spring Boot项目利用MyBatis Generator进行数据层代码自动生成</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color5">MYBATIS,MYBATIS GRNERATOR,SQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/11/08/Mybatis-Plus/" class="archive-article-date">
-  	<time datetime="2019-11-08T08:50:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/08/Mybatis-Plus/">Mybatis-Plus 真好用（乡村爱情加持）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">MYBATIS,SQL,SPRINGBOOT</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/11/08/id-spring-boot-starter/" class="archive-article-date">
-  	<time datetime="2019-11-08T07:43:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/08/id-spring-boot-starter/">封装一个流水号ID生成器：id-spring-boot-starter</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color2">SPRING BOOT</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2019/03/02/lexical-spelling/" class="archive-article-date">
-  	<time datetime="2019-03-02T03:54:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/02/lexical-spelling/">程序员写简历时必须注意的技术词汇拼写</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag article-tag-list-link color3">面试</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -504,8 +478,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
