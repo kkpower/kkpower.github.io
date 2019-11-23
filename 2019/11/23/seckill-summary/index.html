@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="我的爪洼">
 <meta property="og:description" content="秒杀干货分享！！">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-23T03:57:52.145Z">
+<meta property="og:updated_time" content="2019-11-23T04:22:49.901Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="我的爪洼" type="application/atom+xml">
@@ -182,97 +182,13 @@
 
 <p><strong>秒杀开始前将几分钟执行一次定时任务将数据库的要秒杀的商品写入到Redis中</strong></p>
 <p><strong>1、用户在进入商品详情页后</strong></p>
-<pre><code>秒杀未开始显示秒杀倒计时
-秒杀已开始显示秒杀按钮
-秒杀已结束显示秒杀结束
-通过ajax异步获取服务端系统的当前时间与它们进行比较</code></pre><p><strong>2、用户在商品详情页点击秒杀按钮后</strong><br>    （1）从Redis中获取商品信息。<br>        false-&gt;（表示没有获取到商品信息，可能原因是用户手动发送的请求）<br>        return-&gt;（商品信息异常！请确认！）</p>
-<pre><code>（2）验证秒杀活动是否开始。
-    false-&gt;（表示活动未开始，原因是可能用户手动发送请求）
-    return-&gt;(秒杀活动还没有开始请稍后再试)
+<figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line">秒杀未开始显示秒杀倒计时</span><br><span class="line">秒杀已开始显示秒杀按钮</span><br><span class="line">秒杀已结束显示秒杀结束</span><br><span class="line">通过ajax异步获取服务端系统的当前时间与它们进行比较</span><br></pre></td></tr></table></figure>
+<p><strong>2、用户在商品详情页点击秒杀按钮后</strong></p>
+<figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line">（<span class="number">1</span>）从Redis中获取商品信息。</span><br><span class="line">		<span class="keyword">false</span>-&gt;（表示没有获取到商品信息，可能原因是用户手动发送的请求）</span><br><span class="line">		<span class="keyword">return</span>-&gt;（商品信息异常！请确认！）</span><br><span class="line"></span><br><span class="line">	（<span class="number">2</span>）验证秒杀活动是否开始。</span><br><span class="line">		<span class="keyword">false</span>-&gt;（表示活动未开始，原因是可能用户手动发送请求）</span><br><span class="line">		<span class="keyword">return</span>-&gt;(秒杀活动还没有开始请稍后再试)</span><br><span class="line"></span><br><span class="line">	（<span class="number">3</span>）验证秒杀活动是否已经结束。</span><br><span class="line">		<span class="keyword">false</span>-&gt;（表示活动已结束，原因是可能用户手动发送请求）</span><br><span class="line">		<span class="keyword">return</span>-&gt;(秒杀活动已结束，拜拜~)</span><br><span class="line"></span><br><span class="line">	（<span class="number">4</span>）拿到商品的随机签名（唯一标识）返回给前端</span><br><span class="line"></span><br><span class="line">	（<span class="number">5</span>）ajax发送请求携带商品id和商品随机签名参数</span><br><span class="line"></span><br><span class="line">	（<span class="number">6</span>）验证是否携带id和随机签名</span><br><span class="line">		<span class="keyword">false</span>-&gt;(表示请求中没有携带id或随机名，由于使用了RestFul请求那么请求必须符合路径规则，那么这个情况几乎不可能发生)</span><br><span class="line">		<span class="keyword">return</span>-&gt;（商品信息异常！请确认！）</span><br></pre></td></tr></table></figure>
+<p><strong>具体的秒杀业务逻辑处理funName:secKill（service）</strong></p>
+<figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line">(<span class="number">1</span>)验证商品唯一标识是否合法，商品是否存在</span><br><span class="line">	<span class="keyword">false</span>-&gt;（这里可能是因为用户手动发送请求）</span><br><span class="line">	<span class="keyword">return</span>-&gt;（您所秒杀的商品异常！）</span><br><span class="line"></span><br><span class="line">(<span class="number">2</span>)验证商品库存</span><br><span class="line">	<span class="keyword">false</span></span><br><span class="line">	<span class="keyword">return</span>-&gt;（对不起！您所购买的商品已被抢光）</span><br><span class="line"></span><br><span class="line">(<span class="number">3</span>)根据固定的前缀+商品随机签名+用户id来判断当前用户是否购买过这个商品</span><br><span class="line">	<span class="keyword">true</span>-&gt;（表示当前用户已经购买过这个商品了，拒绝请求继续执行，第二次控制用户重复提交购买，这里不能<span class="number">100</span>%拦截用户重复购买）</span><br><span class="line">	<span class="keyword">return</span>-&gt;(对不起！您已经购买过这个商品了！)</span><br><span class="line"></span><br><span class="line">(<span class="number">4</span>)增加限流人数 ，人数+<span class="number">1</span> ，并返回本次增加的结果 (限流人数<span class="number">1000</span>)</span><br><span class="line">	<span class="keyword">if</span>-&gt;(如果自增后的返回值大于<span class="number">1000</span>则进入<span class="keyword">if</span>表示用户超出限流人数)</span><br><span class="line">	<span class="keyword">true</span>-&gt;(达到限流人数以后 减少一个限流人数，回滚刚刚的自动增长)</span><br><span class="line">	<span class="keyword">return</span>-&gt;(对不起！服务器繁忙请稍后再试！)</span><br><span class="line"></span><br><span class="line">(<span class="number">5</span>)创建订单对象，用于Redis记录订单防止调单和将订单存入队列用于通知订单系统完成数据库的下单操作</span><br><span class="line"></span><br><span class="line">(<span class="number">6</span>)<span class="meta">@return</span>：ReturnObject</span><br><span class="line">   利用Redis的事务来解决商品超卖问题     execute执行成功后返回一个数据利用这个数据判断事务是否执行成功</span><br><span class="line">	<span class="number">1</span>、监控商品库存防止超卖，监控限购的key防止用户重复购买。</span><br><span class="line">			监控Redis中的key同时锁定key所对应的记录</span><br><span class="line">	<span class="number">2</span>、判断库存</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">	<span class="number">3</span>、判断当前用户已经购买过商品了</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">	<span class="number">4</span>、开启事务multi</span><br><span class="line">		程序到了这里表示用户没有购买过这个商品，但是却不一定购买成功</span><br><span class="line"></span><br><span class="line">	<span class="number">5</span>、添加一个限购记录 使用任意非<span class="keyword">null</span>的数据作为value即可</span><br><span class="line"></span><br><span class="line">	<span class="number">6</span>、Redis中记录订单信息，防止掉单行为</span><br><span class="line">		   使用固定前缀+商品id+用户id作为key ，使用订单对象的JSON数据作为value</span><br><span class="line">		   然后可以开启定时任务，定期扫描Redis判断那么订单没有完成，如果没有完成及向消息队列中写入一条数据</span><br><span class="line">		   当数据库下单成功之后可以将这个数据从Redis中移除</span><br><span class="line"></span><br><span class="line">	<span class="number">5</span>、执行事务exec</span><br><span class="line">		如果执行成功返回一个List集合，集合中拥有数据，如果事务执行失败返回一个List集合，集合中没有数据</span><br><span class="line">		失败的原因可能是其他线程修改了我们监控的key，可能库存减少了，或限购增加了</span><br><span class="line"></span><br><span class="line">(<span class="number">7</span>)程序到了这里表示Redis事务执行方法返回值为ReturnObject 表示在执行事务之前就已经返回了，可能没有库存或当前用户已经购买了</span><br><span class="line">	<span class="keyword">if</span>(result <span class="keyword">instanceof</span>  ReturnObject)&#123;</span><br><span class="line">		<span class="keyword">return</span> (ReturnObject) result; <span class="comment">//程序结束</span></span><br><span class="line">	&#125;</span><br><span class="line">(<span class="number">8</span>)进入<span class="keyword">if</span>表示返回值result是List类型表示Redis的事务已经提交了，但是没有提交成功</span><br><span class="line">          原因是可有其他的线程修改了数据（但是具体什么原因不详）</span><br><span class="line">          这里不能直接判断是否是错误或其他异常，可能仅仅就是库存被修改了但是还有剩余，处理方式有<span class="number">2</span>种</span><br><span class="line">          <span class="number">1</span>、直接返回给用户一个提示，提示服务器繁忙（这种情况可能会造成大量用户被返回页面）</span><br><span class="line">          <span class="number">2</span>、递归调用自动进入下一轮的抢购，重新执行业务逻辑，这样可能会导致请求时间过长</span><br><span class="line"></span><br><span class="line">	List list= (List) result</span><br><span class="line">	   <span class="keyword">if</span>(list.isEmpty())&#123;</span><br><span class="line">	    <span class="comment">//递归前减少限流人数，防止一个用户占用2个限流位置</span></span><br><span class="line">	    redisTemplate.opsForValue().decrement(Constants.CURRENT_LIMITING);</span><br><span class="line">	    <span class="keyword">return</span> <span class="keyword">this</span>.secKill(goodsId,randomName,uid);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(<span class="number">9</span>)将消息对象的JSON存入MQ中，通知订单系统来完成商品的下单操作</span><br><span class="line"></span><br><span class="line">	jmsTemplate.send(<span class="keyword">new</span> MessageCreator() &#123;</span><br><span class="line">	    <span class="meta">@Override</span></span><br><span class="line">	    <span class="function"><span class="keyword">public</span> Message <span class="title">createMessage</span><span class="params">(Session session)</span> <span class="keyword">throws</span> JMSException </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> session.createTextMessage(JSONObject.toJSONString(orders));</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;);</span><br><span class="line"></span><br><span class="line">(<span class="number">10</span>)减少限流人数</span><br></pre></td></tr></table></figure>
 
-（3）验证秒杀活动是否已经结束。
-    false-&gt;（表示活动已结束，原因是可能用户手动发送请求）
-    return-&gt;(秒杀活动已结束，拜拜~)
-
-（4）拿到商品的随机签名（唯一标识）返回给前端
-
-（5）ajax发送请求携带商品id和商品随机签名参数
-
-（6）验证是否携带id和随机签名
-    false-&gt;(表示请求中没有携带id或随机名，由于使用了RestFul请求那么请求必须符合路径规则，那么这个情况几乎不可能发生)
-    return-&gt;（商品信息异常！请确认！）</code></pre><p><strong>具体的秒杀业务逻辑处理funName:secKill（service）</strong></p>
-<pre><code>(1)验证商品唯一标识是否合法，商品是否存在
-    false-&gt;（这里可能是因为用户手动发送请求）
-    return-&gt;（您所秒杀的商品异常！）
-
-(2)验证商品库存
-    false
-    return-&gt;（对不起！您所购买的商品已被抢光）
-
-(3)根据固定的前缀+商品随机签名+用户id来判断当前用户是否购买过这个商品
-    true-&gt;（表示当前用户已经购买过这个商品了，拒绝请求继续执行，第二次控制用户重复提交购买，这里不能100%拦截用户重复购买）
-    return-&gt;(对不起！您已经购买过这个商品了！)
-
-(4)增加限流人数 ，人数+1 ，并返回本次增加的结果 (限流人数1000)
-    if-&gt;(如果自增后的返回值大于1000则进入if表示用户超出限流人数)
-    true-&gt;(达到限流人数以后 减少一个限流人数，回滚刚刚的自动增长)
-    return-&gt;(对不起！服务器繁忙请稍后再试！)
-
-(5)创建订单对象，用于Redis记录订单防止调单和将订单存入队列用于通知订单系统完成数据库的下单操作
-
-(6)@return：ReturnObject
-   利用Redis的事务来解决商品超卖问题     execute执行成功后返回一个数据利用这个数据判断事务是否执行成功
-    1、监控商品库存防止超卖，监控限购的key防止用户重复购买。
-            监控Redis中的key同时锁定key所对应的记录
-    2、判断库存
-        return
-
-    3、判断当前用户已经购买过商品了
-        return
-
-    4、开启事务multi
-        程序到了这里表示用户没有购买过这个商品，但是却不一定购买成功
-
-    5、添加一个限购记录 使用任意非null的数据作为value即可
-
-    6、Redis中记录订单信息，防止掉单行为
-           使用固定前缀+商品id+用户id作为key ，使用订单对象的JSON数据作为value
-           然后可以开启定时任务，定期扫描Redis判断那么订单没有完成，如果没有完成及向消息队列中写入一条数据
-           当数据库下单成功之后可以将这个数据从Redis中移除
-
-    5、执行事务exec
-        如果执行成功返回一个List集合，集合中拥有数据，如果事务执行失败返回一个List集合，集合中没有数据
-        失败的原因可能是其他线程修改了我们监控的key，可能库存减少了，或限购增加了
-
-(7)程序到了这里表示Redis事务执行方法返回值为ReturnObject 表示在执行事务之前就已经返回了，可能没有库存或当前用户已经购买了
-    if(result instanceof  ReturnObject){
-        return (ReturnObject) result; //程序结束
-    }
-(8)进入if表示返回值result是List类型表示Redis的事务已经提交了，但是没有提交成功
-       原因是可有其他的线程修改了数据（但是具体什么原因不详）
-       这里不能直接判断是否是错误或其他异常，可能仅仅就是库存被修改了但是还有剩余，处理方式有2种
-       1、直接返回给用户一个提示，提示服务器繁忙（这种情况可能会造成大量用户被返回页面）
-       2、递归调用自动进入下一轮的抢购，重新执行业务逻辑，这样可能会导致请求时间过长
-{% codeblock [lang:Java] %}
-		List list= (List) result
-		   if(list.isEmpty()){
-		    //递归前减少限流人数，防止一个用户占用2个限流位置
-		    redisTemplate.opsForValue().decrement(Constants.CURRENT_LIMITING);
-		    return this.secKill(goodsId,randomName,uid);
-		}
-	{% endcodeblock %}
-
-(9)将消息对象的JSON存入MQ中，通知订单系统来完成商品的下单操作
-{% codeblock [lang:Java] %}
-		jmsTemplate.send(new MessageCreator() {
-		    @Override
-		    public Message createMessage(Session session) throws JMSException {
-			return session.createTextMessage(JSONObject.toJSONString(orders));
-		    }
-		});
-	{% endcodeblock %}
-
-(10)减少限流人数</code></pre><p><strong>3、创建一个监听器(Listener)</strong></p>
+<p><strong>3、创建一个监听器(Listener)</strong></p>
 <figure class="highlight java"><figcaption><span>[]</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span>   <span class="title">SecKillMessageListener</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> OrderService orderService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JmsListener</span>(destination = <span class="string">"seckill"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(String message)</span></span>&#123;</span><br><span class="line">	<span class="comment">//获取消息队列中的订单数据并转换成Orders对象</span></span><br><span class="line">	Orders orders= JSONObject.parseObject(message,Orders<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">	<span class="comment">//调用订单业务方法完成数据库的下单，如果返回值为0表示下单成功</span></span><br><span class="line">	<span class="keyword">int</span> result= orderService.addSecKillOrder(orders);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>4、下单</strong></p>
@@ -548,11 +464,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">MYBATIS,SQL,SPRINGBOOT</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">Thread pool</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">Thread pool</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">MYBATIS,SQL,SPRINGBOOT</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -560,11 +476,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">MySQL</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">面试</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">面试</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
