@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="我的爪洼">
 <meta property="og:description" content="秒杀干货分享！！">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-23T09:05:03.848Z">
+<meta property="og:updated_time" content="2019-11-25T01:01:07.620Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="我的爪洼" type="application/atom+xml">
@@ -172,7 +172,7 @@
         
       </header>
       <div align="center" class="post-count">
-    字数：2.2k字 | 预计阅读时长：8分钟
+    字数：2.3k字 | 预计阅读时长：8分钟
 </div>
     
     <div class="article-entry" itemprop="articleBody">
@@ -226,7 +226,7 @@
 <ul>
 <li><p>1、如何防止用户重复提交购买请求？<br>添加一条限购记录<br>在redis写入唯一标识<br>例如：固定的前缀+商品随机名+用户id<br>来判断当前用户是否购买过这个商品</p>
 </li>
-<li><p>2、如何防止商品超卖？<br>利用Redis的事务来解决商品超卖问题<br>监控商品库存防止超卖<br>监控限购的key防止用户重复购买<br>如果事务执行失败，失败的原因可能是其他线程修改了我们监控的key，可能库存减少了，或限购增加了</p>
+<li><p>2、如何防止商品超卖？<br>(1)利用Redis的事务来解决商品超卖问题<br>监控商品库存防止超卖<br>监控限购的key防止用户重复购买<br>如果事务执行失败，失败的原因可能是其他线程修改了我们监控的key，可能库存减少了，或限购增加了<br>(2)redis设置一个键值对存放被抢购数量，每次一个用户进来就将该值加一进行判断，如果小于抢购的商品数量则抢购成功，否则失败。</p>
 </li>
 <li><p>3、如何防止掉单？<br>Redis中记录订单信息<br>使用固定前缀+商品id+用户id作为key ，使用订单对象的JSON数据作为value<br>然后可以开启定时任务，定期扫描Redis判断那么订单没有完成，如果没有完成及向消息队列中写入一条数据<br>当数据库下单成功之后可以将这个数据从Redis中移除</p>
 </li>
@@ -348,6 +348,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2019/11/26/sql-youhua/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          sql优化的几种方式
+        
+      </div>
+    </a>
   
   
     <a href="/2019/11/19/mysql-master-slave/" id="article-nav-older" class="article-nav-link-wrap">
@@ -511,19 +520,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">Thread pool</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">SPRING BOOT</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">面试</a>
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color2">Thread pool</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" target="_blank" rel="noopener" class="js-tag color3">面试</a>
               </li>
              
               <li class="article-tag-list-item">
